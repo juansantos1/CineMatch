@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineMatch — Recomendador Inteligente de Cine y Series</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:ital,wght@0,400;0,500;0,600;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="workspace-sheet">
+
+      <!-- CABECERA / NOMBRE DE LA APLICACIÓN -->
+      <header class="masthead">
+        <div class="brand-identity">
+          <div class="brand-emblem" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="4" width="18" height="16" rx="3" />
+              <line x1="7" y1="4" x2="7" y2="20" />
+              <line x1="17" y1="4" x2="17" y2="20" />
+              <line x1="3" y1="9" x2="7" y2="9" />
+              <line x1="3" y1="15" x2="7" y2="15" />
+              <line x1="17" y1="9" x2="21" y2="9" />
+              <line x1="17" y1="15" x2="21" y2="15" />
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <div class="brand-heading">
+              <h1 class="brand-name">CineMatch</h1>
+              <span class="brand-edition">Curaduría Cinematográfica con IA</span>
+            </div>
+            <p class="brand-tagline">Recomendaciones personalizadas de películas y series a partir de lenguaje natural</p>
+          </div>
+        </div>
+
+        <div class="system-meta">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="headerStatusText">Asistente disponible</span>
+        </div>
+      </header>
+
+      <!-- CUERPO PRINCIPAL DE LA APLICACIÓN -->
+      <main class="workspace-grid">
+
+        <!-- COLUMNA IZQUIERDA: ENTRADA DEL USUARIO Y PREFERENCIAS -->
+        <section class="column-left" aria-label="Panel de búsqueda">
+          <div class="section-heading-group">
+            <span class="section-step">Consulta</span>
+            <h2 class="section-heading">¿Qué le apetece ver hoy?</h2>
+          </div>
+
+          <form id="recommendationForm" class="prompt-form" novalidate>
+            <div class="prompt-module">
+              <div class="field-header">
+                <label for="userPrompt" class="field-label">Describa un género, trama, estado de ánimo o referencia</label>
+                <span class="char-badge" id="charCounter">0 / 300</span>
+              </div>
+
+              <div class="textarea-container" id="textareaBox">
+                <textarea
+                  id="userPrompt"
+                  class="editorial-textarea"
+                  rows="4"
+                  maxlength="300"
+                  placeholder="Ej.: Quiero ver una película de suspenso e investigación con buen guion, o una comedia ligera para el fin de semana..."
+                ></textarea>
+                <div class="textarea-footer">
+                  <span class="input-hint">Especializado exclusivamente en cine, series y documentales.</span>
+                  <button type="button" class="text-link-btn hidden" id="btnClearPrompt">Limpiar</button>
+                </div>
+              </div>
+
+              <!-- Ideas rápidas opcionales para inspirar al usuario -->
+              <div class="presets-block">
+                <span class="presets-title">Sugerencias rápidas:</span>
+                <div class="preset-list">
+                  <button type="button" class="preset-chip" data-prompt="Busco una película de ciencia ficción reflexiva sobre viajes en el tiempo o el espacio, con un final memorable.">
+                    Ciencia ficción
+                  </button>
+                  <button type="button" class="preset-chip" data-prompt="Quiero un thriller de misterio e investigación policial con atmósfera tensa y buenos giros.">
+                    Suspenso policial
+                  </button>
+                  <button type="button" class="preset-chip" data-prompt="Recomiéndame una comedia cálida y entretenida para ver en familia este fin de semana.">
+                    Comedia familiar
+                  </button>
+                  <button type="button" class="preset-chip" data-prompt="Me gustaría una historia de terror psicológico inquietante pero sin exceso de efectos.">
+                    Terror psicológico
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Parámetros opcionales -->
+            <div class="parameters-module">
+              <div class="section-heading-group">
+                <span class="section-step">Filtros</span>
+                <h2 class="section-heading">Preferencias opcionales</h2>
+              </div>
+              <div class="params-grid">
+                <div class="param-field">
+                  <label for="selectMood">Tono preferido</label>
+                  <div class="select-wrapper">
+                    <select id="selectMood">
+                      <option value="Cualquier tono" selected>Cualquier tono</option>
+                      <option value="Reflexivo y pausado">Reflexivo y pausado</option>
+                      <option value="Cálido y cercano">Cálido y cercano</option>
+                      <option value="Intenso y envolvente">Intenso y envolvente</option>
+                      <option value="Ágil y entretenido">Ágil y entretenido</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="param-field">
+                  <label for="selectDuration">Duración</label>
+                  <div class="select-wrapper">
+                    <select id="selectDuration">
+                      <option value="Cualquier duración" selected>Cualquier duración</option>
+                      <option value="Menos de 2 horas">Menos de 2 horas</option>
+                      <option value="Hasta 2 horas y media">Hasta 2 horas y media</option>
+                      <option value="Miniserie corta">Miniserie corta</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BOTÓN PARA ENVIAR O GENERAR EL RESULTADO -->
+            <div class="submit-module">
+              <button type="submit" id="btnGenerate" class="btn-generate">
+                <span id="btnGenerateLabel">Generar recomendación</span>
+                <svg id="btnGenerateIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- COLUMNA DERECHA: ÁREA DINÁMICA DE RESULTADOS DE LA IA -->
+        <section class="column-right" aria-label="Resultado de la recomendación">
+
+          <!-- ESTADO INICIAL: ANTES DE ENVIAR UNA SOLICITUD -->
+          <div id="emptyState" class="empty-state-panel">
+            <div class="empty-illustration" aria-hidden="true">
+              <svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+                <circle cx="24" cy="24" r="19" stroke-dasharray="3 3" />
+                <rect x="15" y="16" width="18" height="16" rx="2.5" />
+                <line x1="15" y1="21" x2="33" y2="21" />
+                <circle cx="24" cy="26.5" r="2.5" />
+              </svg>
+            </div>
+            <h3 class="empty-title">Su espacio de recomendación está listo</h3>
+            <p class="empty-description">
+              Escriba en el panel izquierdo qué tipo de película o serie desea ver y presione «Generar recomendación» para que la inteligencia artificial analice su solicitud.
+            </p>
+          </div>
+
+          <!-- INDICADOR QUE MUESTRA QUE LA IA ESTÁ PROCESANDO (solo aparece al enviar) -->
+          <div id="loadingSection" class="processing-state hidden" aria-live="polite">
+            <div class="processing-card">
+              <div class="processing-indicator" aria-hidden="true">
+                <span class="pulse-ring"></span>
+                <span class="pulse-core"></span>
+              </div>
+              <div class="processing-copy">
+                <span class="processing-title">Analizando su solicitud con inteligencia artificial</span>
+                <span class="processing-step" id="loadingStepText">Interpretando género, atmósfera y preferencias...</span>
+                <div class="processing-track">
+                  <div class="processing-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESPUESTA GENERADA POR LA IA (solo aparece cuando hay recomendación válida) -->
+          <div id="responseSection" class="result-stack hidden">
+            <article class="dossier-card">
+              <div class="dossier-header">
+                <div class="dossier-badges-left">
+                  <span class="dossier-badge">Recomendación generada por IA</span>
+                  <span class="refinement-tag hidden" id="refinementBadge">Ajustada según su corrección</span>
+                </div>
+                <span class="dossier-affinity" id="movieMatch">98% de afinidad</span>
+              </div>
+
+              <!-- Resumen de lo que pidió el usuario -->
+              <div class="query-summary-bar">
+                <span class="query-summary-label">Para su búsqueda:</span>
+                <p class="query-summary-text" id="displayedUserQuery"></p>
+              </div>
+
+              <div class="dossier-body">
+                <!-- Póster minimalista en tonos pastel -->
+                <div class="poster-frame poster-sage" id="moviePoster" aria-hidden="true">
+                  <span class="poster-catalog" id="movieCatalog">CAT · 014</span>
+                  <div class="poster-motif" id="posterMotif"></div>
+                  <span class="poster-year" id="movieYear">2016</span>
+                </div>
+
+                <div class="dossier-content">
+                  <div class="title-group">
+                    <h3 class="film-title" id="movieTitle">La llegada (Arrival)</h3>
+                    <p class="film-director" id="movieDirector">Dirección: Denis Villeneuve · Estados Unidos</p>
+                  </div>
+
+                  <div class="metadata-row" id="movieMeta"></div>
+
+                  <div class="rationale-block">
+                    <span class="rationale-label">Por qué la IA recomienda esta obra</span>
+                    <p id="aiResponseText" class="rationale-text"></p>
+                  </div>
+
+                  <div class="catalog-availability" id="moviePlatforms"></div>
+                </div>
+              </div>
+
+              <!-- Panel desplegable para corregir o afinar lo que generó la IA -->
+              <div id="refinePanel" class="refine-drawer hidden">
+                <label for="refineInput" class="refine-label">
+                  Indique a la IA qué desea corregir o ajustar de este resultado:
+                </label>
+                <div class="refine-input-row">
+                  <input
+                    type="text"
+                    id="refineInput"
+                    class="refine-input"
+                    maxlength="160"
+                    placeholder="Ej.: Prefiero algo más corto, más reciente, de otro estilo o más ligero..."
+                  />
+                  <button type="button" id="btnApplyRefine" class="btn-refine-submit">Aplicar corrección</button>
+                  <button type="button" id="btnCancelRefine" class="btn-refine-cancel">Cancelar</button>
+                </div>
+              </div>
+
+              <!-- PIE INTEGRADO: OPCIONES DE CORREGIR / EDITAR / REGENERAR Y BOTONES DE UTILIDAD -->
+              <footer class="dossier-footer">
+                <div class="control-actions">
+                  <button type="button" id="btnOpenRefine" class="btn-outline" title="Pedirle a la IA que corrija o ajuste esta sugerencia">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <line x1="4" y1="21" x2="4" y2="14"></line>
+                      <line x1="4" y1="10" x2="4" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12" y2="3"></line>
+                      <line x1="20" y1="21" x2="20" y2="16"></line>
+                      <line x1="20" y1="12" x2="20" y2="3"></line>
+                      <line x1="2" y1="14" x2="6" y2="14"></line>
+                      <line x1="10" y1="8" x2="14" y2="8"></line>
+                      <line x1="18" y1="16" x2="22" y2="16"></line>
+                    </svg>
+                    <span>Corregir resultado</span>
+                  </button>
+
+                  <button type="button" id="btnEditPrompt" class="btn-outline" title="Modificar su solicitud original en el panel izquierdo">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    <span>Editar solicitud</span>
+                  </button>
+
+                  <button type="button" id="btnRegenerate" class="btn-outline btn-outline-sage" title="Descartar esta película y generar otra alternativa">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <polyline points="1 20 1 14 7 14"></polyline>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    <span>Volver a generar</span>
+                  </button>
+                </div>
+
+                <div class="utility-evaluation">
+                  <span class="utility-label" id="utilityPromptLabel">¿Fue útil esta recomendación?</span>
+                  <div class="utility-buttons">
+                    <button type="button" id="btnUsefulYes" class="btn-utility" aria-pressed="false">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span>Sí, fue útil</span>
+                    </button>
+
+                    <button type="button" id="btnUsefulNo" class="btn-utility" aria-pressed="false">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                      <span>No fue útil</span>
+                    </button>
+                  </div>
+                </div>
+              </footer>
+
+              <p id="feedbackConfirmMsg" class="feedback-note hidden"></p>
+            </article>
+          </div>
+
+          <!-- MENSAJE SENCILLO PARA CUANDO LA IA NO PUEDA RESPONDER (solo aparece ante consultas vacías o ajenas al cine) -->
+          <div id="errorSection" class="limit-state-wrapper hidden" role="alert">
+            <div class="limit-notice">
+              <div class="limit-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12.5"></line>
+                  <circle cx="12" cy="16" r="0.7" fill="currentColor"></circle>
+                </svg>
+              </div>
+              <div class="limit-content">
+                <h3 class="limit-heading" id="errorHeading">No pudimos responder a esta solicitud</h3>
+                <p class="limit-message" id="errorText">
+                  Lo sentimos, CineMatch solo está preparado para recomendar películas, series y documentales. Intente describir un género, trama o película de referencia.
+                </p>
+              </div>
+              <button type="button" id="btnFocusPromptFromError" class="btn-limit-restore">
+                Modificar solicitud
+              </button>
+            </div>
+          </div>
+
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
